@@ -10,6 +10,7 @@
     td__cert_state: 'ON'
     td__cert_locality: 'Toronto'
     td__borg_url: user@example.org:myrepo
+    td__borg_passphrase: test
 
   roles:
     - role: ansible-role-taskserver
