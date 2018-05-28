@@ -44,7 +44,7 @@
 
 - name: Copy borgmatic files
   template:
-    src: "templates/borgmatic/{{ item }}.j2"
+    src: "templates/{{ item }}.j2"
     dest: "{{ td__borgmatic_project_src }}/borgmatic/{{ item }}"
   with_items:
     - before-backup
@@ -53,6 +53,18 @@
     - config.yaml
     - passphrase
   notify: start borgmatic
+
+- name: Copy ssh files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ td__borgmatic_project_src }}/ssh/{{ item }}"
+    owner: root
+    group: root
+    mode: '0600'
+  with_items:
+    - id_rsa
+    - id_rsa.pub
+    - known_hosts
 
 - name: Extend borgmatic compose file
   template:

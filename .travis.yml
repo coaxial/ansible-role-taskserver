@@ -2,7 +2,7 @@
 jobs:
   include:
     - stage: test
-      sudo: required  # use a VM because docker in docker isn't great
+      sudo: required  # use a VM because docker in docker in docker isn't great
       language: python
       python: "2.7"
       cache: pip
