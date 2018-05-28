@@ -2,7 +2,7 @@
 - name: Refresh apt cache
   apt:
     update_cache: true
-    cache_valid_time: 216000 # seconds; i.e. 1 day
+    cache_valid_time: 216000  # seconds; i.e. 1 day
 
 - name: Ensure git is installed
   package:
@@ -29,7 +29,7 @@
 - name: Set hostname for taskd
   template:
     src: templates/docker-compose.hostname-override.yml.j2
-    dest: "{{ td__project_src }}"/docker-compose.hostname-override.yml
+    dest: "{{ td__project_src }}/docker-compose.hostname-override.yml"
   notify: start taskd
 
 - name: Clone borgmatic service repo
