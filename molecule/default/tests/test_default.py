@@ -25,7 +25,7 @@ def test_taskd_settings(host):
     ]
 
     for f in files:
-        assert host.file("/opt/docker-taskd-service" + f).exists
+        assert host.file("/opt/docker-taskd-service/" + f).exists
 
 
 def test_borgmatic_settings(host):
@@ -39,4 +39,4 @@ def test_borgmatic_settings(host):
     ]
 
     for f in files:
-        assert host.file("/opt/docker-borgmatic" + f).exists
+        assert host.file("/opt/docker-borgmatic/" + f).exists
