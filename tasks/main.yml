@@ -13,6 +13,7 @@
   git:
     repo: 'https://github.com/coaxial/docker-taskd-service'
     umask: '022'
+    version: 'master'
     update: true
     dest: "{{ td__project_src }}"
   notify: start taskd
