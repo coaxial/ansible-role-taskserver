@@ -20,7 +20,7 @@
 - name: Copy settings
   template:
     src: templates/taskserver.env.j2
-    dest: "{{ td__project_src }}"/taskserver/taskserver.env
+    dest: "{{ td__project_src }}/taskserver/taskserver.env"
     owner: root
     group: root
     mode: '0600'
@@ -43,7 +43,7 @@
 
 - name: Copy borgmatic files
   template:
-    src: templates/borgmatic/"{{ item }}.j2"
+    src: "templates/borgmatic/{{ item }}.j2"
     dest: "{{ td__borgmatic_project_src }}/borgmatic/{{ item }}"
   with_items:
     - before-backup
@@ -56,5 +56,5 @@
 - name: Extend borgmatic compose file
   template:
     src: templates/docker-compose.data-vol.yml.j2
-    dest: "{{ td__borgmatic_project_src }}"/docker-compose.data-vol.yml
+    dest: "{{ td__borgmatic_project_src }}/docker-compose.data-vol.yml"
   notify: start borgmatic
