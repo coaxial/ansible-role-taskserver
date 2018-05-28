@@ -13,11 +13,19 @@ good idea to mention in this section that the boto package is required.
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
+td__fqdn
+td__orgname
+td__username
+td__cert_bits
+td__cert_expiration_days
+td__cert_organization
+td__cert_country
+td__cert_state
+td__cert_locality
+td__borg_url
+td__borg_passcommand
+td__service_name
+td__project_src
 
 Dependencies
 ------------

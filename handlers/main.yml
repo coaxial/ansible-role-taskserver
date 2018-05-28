@@ -1,2 +1,18 @@
 ---
-# handlers file for ansible-role-taskserver
+- name: start taskd
+  docker_service:
+    project_src: "{{ td__project_src }}"
+    files:
+      - docker-compose.yml
+      - docker-compose.hostname-override.yml
+    recreate: always
+  when: not td__testing
+
+- name: start borgmatic
+  docker_service:
+    project_src: "{{ td__borgmatic_project_src }}"
+    files:
+      - docker-compose.yml
+      - docker-compose.data-vol.yml
+    recreate: always
+  when: not td__testing
