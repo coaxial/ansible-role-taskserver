@@ -2,14 +2,14 @@
 - name: Converge
   hosts: all
   vars:
-    - td__testing: true
-    - td__fqdn: taskd.example.org
-    - td__orgname: 'test org'
-    - td__cert_organization: 'test cert org'
-    - td__cert_country: 'CA'
-    - td__cert_state: 'ON'
-    - td__cert_locality: 'Toronto'
-    - td__borg_url: user@example.org:myrepo
+    td__testing: true
+    td__fqdn: taskd.example.org
+    td__orgname: 'test org'
+    td__cert_organization: 'test cert org'
+    td__cert_country: 'CA'
+    td__cert_state: 'ON'
+    td__cert_locality: 'Toronto'
+    td__borg_url: user@example.org:myrepo
 
   roles:
     - role: ansible-role-taskserver
