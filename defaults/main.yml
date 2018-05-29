@@ -7,6 +7,5 @@ td__fetch_client_files: true
 td__project_src: /opt/docker-taskd-service
 td__service_name: "{{ td__fqdn }}"
 td__taskdata_volname: docker-taskd-service_taskddata
-td__taskddata_volume_name: docker-taskd-service_taskddata
 td__testing: false
 td__username: user
