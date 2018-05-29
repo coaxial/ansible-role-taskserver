@@ -13,19 +13,20 @@ good idea to mention in this section that the boto package is required.
 Role Variables
 --------------
 
+td__borg_passcommand
+td__borg_url
+td__cert_bits
+td__cert_country
+td__cert_expiration_days
+td__cert_locality
+td__cert_organization
+td__cert_state
+td__fetch_client_files
 td__fqdn
 td__orgname
-td__username
-td__cert_bits
-td__cert_expiration_days
-td__cert_organization
-td__cert_country
-td__cert_state
-td__cert_locality
-td__borg_url
-td__borg_passcommand
-td__service_name
 td__project_src
+td__service_name
+td__username
 
 Dependencies
 ------------
