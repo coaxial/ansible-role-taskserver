@@ -7,7 +7,7 @@ backups to a borg repository.
 Requirements
 ------------
 
-An Ubuntu host with Docker and docker-compose installed.
+An Ubuntu host with Python, Docker and docker-compose installed.
 
 Role Variables
 --------------
@@ -71,7 +71,7 @@ Refer to the [taskwarrior documentation](https://gitpitch.com/GothenburgBitFacto
 License
 -------
 
-BSD
+GPLv3
 
 Author Information
 ------------------
