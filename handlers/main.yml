@@ -1,2 +1,37 @@
 ---
-# handlers file for ansible-role-taskserver
+- name: start taskd
+  docker_service:
+    project_src: "{{ td__project_src }}"
+    files:
+      - docker-compose.yml
+      - docker-compose.hostname-override.yml
+    recreate: always
+  when: not td__testing
+
+
+- name: wait for client files
+  wait_for:
+    path: "{{ td__project_src }}/taskserver/client_certs/{{ td__username }}-uuid"
+  listen: fetch client files
+  when: td__fetch_client_files and not td__testing
+
+- name: fetch client files
+  fetch:
+    src: "{{ td__project_src }}/taskserver/client_certs/{{ item }}"
+    dest: "client_files/{{ item }}"
+    flat: true
+  with_items:
+    - ca.cert.pem
+    - "{{ td__username }}.cert.pem"
+    - "{{ td__username }}.key.pem"
+    - "{{ td__username }}-uuid"
+  when: td__fetch_client_files and not td__testing
+
+- name: start borgmatic
+  docker_service:
+    project_src: "{{ td__borgmatic_project_src }}"
+    files:
+      - docker-compose.yml
+      - docker-compose.data-vol.yml
+    recreate: always
+  when: not td__testing

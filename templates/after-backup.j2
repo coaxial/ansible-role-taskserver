@@ -1,0 +1,17 @@
+#!/bin/sh
+
+timestamp() {
+  date -I'seconds' # ISO-8601 format
+}
+
+last_backup_info() {
+  export BORG_REMOTE_PATH=borg1
+  export BORG_PASSCOMMAND='cat /borgmatic/passphrase'
+  export BORG_CACHE_DIR='/cache'
+  last_backup_name="$(borg list --short --last 1 {{ td__borg_url }})"
+
+  borg info "{{ td__borg_url }}::${last_backup_name}"
+}
+
+echo "$(timestamp) - Backup completed"
+last_backup_info
