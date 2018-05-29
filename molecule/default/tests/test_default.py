@@ -30,13 +30,46 @@ def test_taskd_settings(host):
 
 def test_borgmatic_settings(host):
     files = [
-        'borgmatic/before-backup',
-        'borgmatic/after-backup',
-        'borgmatic/failed-backup',
-        'borgmatic/config.yaml',
-        'borgmatic/passphrase',
-        'docker-compose.data-vol.yml',
+        {
+            'name': 'borgmatic/before-backup',
+            'mode': 0o700,
+        },
+        {
+            'name': 'borgmatic/after-backup',
+            'mode': 0o700,
+        },
+        {
+            'name': 'borgmatic/failed-backup',
+            'mode': 0o700,
+        },
+        {
+            'name': 'borgmatic/config.yaml',
+            'mode': 0o400,
+        },
+        {
+            'name': 'borgmatic/passphrase',
+            'mode': 0o400,
+        },
+        {
+            'name': 'docker-compose.data-vol.yml',
+            'mode': 0o644
+        },
     ]
 
     for f in files:
-        assert host.file("/opt/docker-borgmatic/" + f).exists
+        assert host.file("/opt/docker-borgmatic/" + f['name']).exists
+        assert host.file(
+            "/opt/docker-borgmatic/" + f['name']
+        ).mode == f['mode']
+
+
+def test_ssh_files(host):
+    files = [
+        'id_rsa',
+        'id_rsa.pub',
+        'known_hosts',
+    ]
+
+    for f in files:
+        assert host.file("/opt/docker-borgmatic/ssh/" + f).exists
+        assert host.file("/opt/docker-borgmatic/ssh/" + f).mode == 0o600

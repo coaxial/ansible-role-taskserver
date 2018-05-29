@@ -12,8 +12,8 @@
 - name: wait for client files
   wait_for:
     path: "{{ td__project_src }}/taskserver/client_certs/{{ td__username }}-uuid"
-  when: td__fetch_client_files and not td__testing
   listen: fetch client files
+  when: td__fetch_client_files and not td__testing
 
 - name: fetch client files
   fetch:
@@ -25,6 +25,7 @@
     - "{{ td__username }}.cert.pem"
     - "{{ td__username }}.key.pem"
     - "{{ td__username }}-uuid"
+  when: td__fetch_client_files and not td__testing
 
 - name: start borgmatic
   docker_service:
