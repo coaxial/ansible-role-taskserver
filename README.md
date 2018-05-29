@@ -38,7 +38,7 @@ Role files
 
 name | purpose
 ---|---
-`ssh/id_rsa{,pub}` | ssh keys to connect to the borg repo (only if `td__enable_backups`)
+`ssh/id_rsa{,.pub}` | ssh keys to connect to the borg repo (only if `td__enable_backups`)
 `ssh/known_hosts` | ssh fingerprint for borg repo host (only if `td__enable_backups`)
 
 Dependencies
