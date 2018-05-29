@@ -42,11 +42,8 @@
     name: restore-backup
     volumes:
       - taskddata_restore:/backup
-      - "{{ td__taskdata_volname }}":/target
-    command: >
-      /bin/sh -c '
-      cp -r /backup /target
-      '
+      - "{{ td__taskdata_volname }}:/target"
+    command: /bin/sh -c 'cp -r /backup /target'
     cleanup: true
     detach: false
 
@@ -54,4 +51,3 @@
   docker_volume:
     name: taskddata_restore
     state: absent
-
