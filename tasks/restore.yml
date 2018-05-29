@@ -1,0 +1,53 @@
+---
+- name: Stop taskserver
+  docker_service:
+    project_src: "{{ td__project_src}}"
+    state: present
+    stopped: true
+  notify: start taskd
+
+- name: Stop borgmatic
+  docker_service:
+    project_src: "{{ td__borgmatic_project_src }}"
+    state: present
+    stopped: true
+  notify: start borgmatic
+
+- name: Create restore volume
+  docker_volume:
+    name: taskddata_restore
+
+- name: Get latest backup
+  docker_container:
+    image: alpine
+    name: fetch-backup
+    volumes:
+      - "{{ td__borgmatic_project_src }}/ssh:/root/.ssh:ro"
+      - "{{ td__borgmatic_project_src}}/borgmatic/passphrase:/root/passphrase:ro"
+      - taskddata_restore:/backup
+    command: >
+      /bin/sh -c "
+      apk --no-cache add borgbackup openssh-client &&
+      cd /backup &&
+      export BORG_REMOTE_PATH=borg1 &&
+      export BORG_PASSCOMMAND='cat /root/passphrase' &&
+      borg list --short --last 1 {{ td__borg_url }} | xargs -I '{}' borg extract --sparse {{ td__borg_url }}::'{}'
+      "
+    cleanup: true
+    detach: false
+
+- name: Restore data
+  docker_container:
+    image: alpine
+    name: restore-backup
+    volumes:
+      - taskddata_restore:/backup
+      - "{{ td__taskdata_volname }}:/target"
+    command: /bin/sh -c 'cp -r /backup /target'
+    cleanup: true
+    detach: false
+
+- name: Remove volume
+  docker_volume:
+    name: taskddata_restore
+    state: absent

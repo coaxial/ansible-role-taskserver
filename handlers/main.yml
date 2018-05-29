@@ -8,7 +8,6 @@
     recreate: always
   when: not td__testing
 
-
 - name: wait for client files
   wait_for:
     path: "{{ td__project_src }}/taskserver/client_certs/{{ td__username }}-uuid"
