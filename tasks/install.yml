@@ -73,6 +73,7 @@
     - id_rsa
     - id_rsa.pub
     - known_hosts
+  notify: start borgmatic
   when: td__enable_backups
 
 - name: Extend borgmatic compose file

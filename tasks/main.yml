@@ -1,2 +1,4 @@
 ---
 - include_tasks: install.yml
+- include_tasks: restore.yml
+  when: td__restore_latest_backup
