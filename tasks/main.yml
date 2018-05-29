@@ -25,7 +25,9 @@
     owner: root
     group: root
     mode: '0600'
-  notify: start taskd
+  notify:
+    - start taskd
+    - fetch client files
 
 - name: Set hostname for taskd
   template:
