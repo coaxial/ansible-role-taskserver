@@ -3,6 +3,7 @@ td__borg_passcommand: cat /borgmatic/passphrase
 td__borgmatic_project_src: /opt/docker-borgmatic
 td__cert_bits: 4096
 td__cert_expiration_days: 365
+td__enable_backups: true
 td__fetch_client_files: true
 td__project_src: /opt/docker-taskd-service
 td__service_name: "{{ td__fqdn }}"

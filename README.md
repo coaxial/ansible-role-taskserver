@@ -24,6 +24,7 @@ td__cert_expiration_days | `365` | any number of days | defines how long the cer
 td__cert_locality | none, must be set | any string | defines the locality field in the generated certificates
 td__cert_organization | none, must be set | any string | defines the organization field in the generated certificates
 td__cert_state | none, must be set | any string | defines the state field in the generated certificates
+td__enable_backups | `true` | boolean | whether to enable hourly borg backups
 td__fetch_client_files | `true` | boolean | whether to fetch the new taskserver user certificates and uuid necessary for configuring the taskwarrior client
 td__fqdn | none, must be set | any valid FQDN (must resolve with DNS) | sets the container's hostname and is used as the certificates' CN. Must match the FQDN the client uses to connect to the server
 td__orgname | none, must be set | any string | defines the taskserver organization
@@ -31,6 +32,14 @@ td__project_src | `/opt/docker-taskd-service` | any valid path | defines where t
 td__service_name | value of `td__fqdn` | any string | used to name borg backups
 td__taskdata_volname | `docker-taskd-service_taskddata` | the docker-compose name for the `taskddata` volume created by `docker-taskd-service` | tells the backup service where to find taskd's data. No need to change unless `td__project_src` has been changed
 td__username | `user` | any string | username to create in the taskserver
+
+Role files
+----------
+
+name | purpose
+---|---
+`ssh/id_rsa{,pub}` | ssh keys to connect to the borg repo (only if `td__enable_backups`)
+`ssh/known_hosts` | ssh fingerprint for borg repo host (only if `td__enable_backups`)
 
 Dependencies
 ------------

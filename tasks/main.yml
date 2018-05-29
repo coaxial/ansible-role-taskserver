@@ -43,6 +43,7 @@
     update: true
     dest: "{{ td__borgmatic_project_src }}"
   notify: start borgmatic
+  when: td__enable_backups
 
 - name: Copy borgmatic files
   template:
@@ -59,6 +60,7 @@
     - name: config.yaml
     - name: passphrase
   notify: start borgmatic
+  when: td__enable_backups
 
 - name: Copy ssh files
   copy:
@@ -71,9 +73,11 @@
     - id_rsa
     - id_rsa.pub
     - known_hosts
+  when: td__enable_backups
 
 - name: Extend borgmatic compose file
   template:
     src: templates/docker-compose.data-vol.yml.j2
     dest: "{{ td__borgmatic_project_src }}/docker-compose.data-vol.yml"
   notify: start borgmatic
+  when: td__enable_backups
