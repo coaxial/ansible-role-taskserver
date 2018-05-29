@@ -1,6 +1,8 @@
 Taskserver role
 =========
 
+[![Build Status](https://travis-ci.org/coaxial/ansible-role-taskserver.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-taskserver)
+
 Deploy a [taskwarrior](https://taskwarrior.org) taskserver with optional hourly
 backups to a borg repository.
 
