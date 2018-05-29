@@ -1,4 +1,15 @@
 ---
+- name: Check docker-compose version
+  # workaround for https://github.com/docker/compose/issues/5874
+  shell: docker-compose --version | sed 's/.*version \([0-9\.]\{1,\}\).*/\1/'
+  register: td__docker_compose_version
+  changed_when: false
+  failed_when: false
+
+- name: Source vars file for docker-compose < 1.22.0
+  include_vars: compose-lt-1.22.0.yml
+  when: td__docker_compose_version.stdout is version('1.22.0', 'lt')
+
 - name: Refresh apt cache
   apt:
     update_cache: true
