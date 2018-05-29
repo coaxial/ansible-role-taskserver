@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Coxial
+  author: Coaxial
   description: Setup and backup a taskwarrior taskserver
   company: 64b.it
 
@@ -14,10 +14,10 @@ galaxy_info:
         - xenial
 
   galaxy_tags:
-    taskwarrior
-    taskd
-    taskserver
-    borg
-    borgmatic
+    - taskwarrior
+    - taskd
+    - taskserver
+    - borg
+    - borgmatic
 
 dependencies: []
