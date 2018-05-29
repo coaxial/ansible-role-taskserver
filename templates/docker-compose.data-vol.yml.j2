@@ -1,8 +1,9 @@
 ---
 version: '3'
-services: borgmatic
-  volumes:
-    - taskddata:/var/taskd:ro
+services:
+  borgmatic:
+    volumes:
+      - taskddata:/var/taskd:ro
 
 volumes:
   taskddata:
