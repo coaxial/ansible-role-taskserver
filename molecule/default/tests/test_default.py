@@ -6,14 +6,18 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 
+taskd_dir = '/opt/docker-taskd-service/'
+borgmatic_dir = '/opt/docker-borgmatic-taskserver/'
+
+
 def test_taskd_presence(host):
-    repo = host.file('/opt/docker-taskd-service')
+    repo = host.file(taskd_dir)
 
     assert repo.exists
 
 
 def test_borgmatic_presence(host):
-    repo = host.file('/opt/docker-borgmatic')
+    repo = host.file(borgmatic_dir)
 
     assert repo.exists
 
@@ -25,7 +29,7 @@ def test_taskd_settings(host):
     ]
 
     for f in files:
-        assert host.file("/opt/docker-taskd-service/" + f).exists
+        assert host.file(taskd_dir + f).exists
 
 
 def test_borgmatic_settings(host):
@@ -57,10 +61,8 @@ def test_borgmatic_settings(host):
     ]
 
     for f in files:
-        assert host.file("/opt/docker-borgmatic/" + f['name']).exists
-        assert host.file(
-            "/opt/docker-borgmatic/" + f['name']
-        ).mode == f['mode']
+        assert host.file(borgmatic_dir + f['name']).exists
+        assert host.file(borgmatic_dir + f['name']).mode == f['mode']
 
 
 def test_ssh_files(host):
@@ -71,5 +73,5 @@ def test_ssh_files(host):
     ]
 
     for f in files:
-        assert host.file("/opt/docker-borgmatic/ssh/" + f).exists
-        assert host.file("/opt/docker-borgmatic/ssh/" + f).mode == 0o600
+        assert host.file(borgmatic_dir + '/ssh/' + f).exists
+        assert host.file(borgmatic_dir + '/ssh/' + f).mode == 0o600

@@ -8,7 +8,7 @@
 
 - name: Source vars file for docker-compose < 1.22.0
   include_vars: compose-lt-1.22.0.yml
-  when: td__docker_compose_version.stdout is version('1.22.0', 'lt')
+  when: td__docker_compose_version.stdout != "" and td__docker_compose_version.stdout is version('1.22.0', 'lt')
 
 - name: Refresh apt cache
   apt:
