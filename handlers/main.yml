@@ -33,4 +33,4 @@
       - docker-compose.yml
       - docker-compose.data-vol.yml
     recreate: always
-  when: not td__testing
+  when: not td__testing and td__enable_backups

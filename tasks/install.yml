@@ -54,7 +54,7 @@
     update: true
     dest: "{{ td__borgmatic_project_src }}"
   notify: start borgmatic
-  when: td__enable_backups
+  when: td__enable_backups or td__restore_latest_backup
 
 - name: Copy borgmatic files
   template:
@@ -69,9 +69,16 @@
     - name: failed-backup
       mode: "0700"
     - name: config.yaml
-    - name: passphrase
   notify: start borgmatic
   when: td__enable_backups
+
+- name: Copy borgmatic passphrase
+  template:
+    src: "templates/passphrase.j2"
+    dest: "{{ td__borgmatic_project_src }}/borgmatic/passphrase"
+    mode: '0400'
+  notify: start borgmatic
+  when: td__enable_backups or td__restore_latest_backup
 
 - name: Copy ssh files
   copy:
@@ -85,7 +92,7 @@
     - id_rsa.pub
     - known_hosts
   notify: start borgmatic
-  when: td__enable_backups
+  when: td__enable_backups or td__restore_latest_backup
 
 - name: Extend borgmatic compose file
   template:
