@@ -2,15 +2,21 @@
 - name: Stop taskserver
   docker_service:
     project_src: "{{ td__project_src}}"
-    state: present
-    stopped: true
+    state: absent
   notify: start taskd
+
+- name: Check if Borgmatic is running for taskserver
+  command: "docker ps --filter 'name=borgmatic' --format={% raw %}'{{.Names}}'{% endraw %}"
+  register: borgmatic_containers
+  changed_when: false
+  failed_when: false
 
 - name: Stop borgmatic
   docker_service:
     project_src: "{{ td__borgmatic_project_src }}"
     state: present
     stopped: true
+  when: borgmatic_containers.stdout | regex_search("taskserver")
   notify: start borgmatic
 
 - name: Create restore volume
@@ -22,7 +28,7 @@
     image: alpine
     name: fetch-backup
     volumes:
-      - "{{ td__borgmatic_project_src }}/ssh:/root/.ssh:ro"
+      - "{{ td__borgmatic_project_src }}/ssh/:/root/.ssh/:ro"
       - "{{ td__borgmatic_project_src}}/borgmatic/passphrase:/root/passphrase:ro"
       - taskddata_restore:/backup
     command: >
@@ -31,7 +37,8 @@
       cd /backup &&
       export BORG_REMOTE_PATH=borg1 &&
       export BORG_PASSCOMMAND='cat /root/passphrase' &&
-      borg list --short --last 1 {{ td__borg_url }} | xargs -I '{}' borg extract --sparse {{ td__borg_url }}::'{}'
+      borg list --short --last 1 {{ td__borg_url }} | xargs -I '{}' borg extract --sparse --strip-components 2 {{ td__borg_url }}::'{}' &&
+      ls -clash /backup
       "
     cleanup: true
     detach: false
@@ -43,7 +50,7 @@
     volumes:
       - taskddata_restore:/backup
       - "{{ td__taskdata_volname }}:/target"
-    command: /bin/sh -c 'cp -r /backup /target'
+    command: /bin/sh -c 'cp -r /backup/* /target'
     cleanup: true
     detach: false
 
