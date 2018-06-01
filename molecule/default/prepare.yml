@@ -1,5 +1,7 @@
 ---
 - name: Prepare
   hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks: []
+  roles:
+    - geerlingguy.docker

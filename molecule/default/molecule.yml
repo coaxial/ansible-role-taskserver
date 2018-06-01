@@ -7,10 +7,18 @@ lint:
   name: yamllint
 platforms:
   - name: instance
-    image: geerlingguy/docker-ubuntu1604-ansible
+    image: solita/ubuntu-systemd:16.04
+    privileged: true
     command: /sbin/init
     capabilities:
       - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      # - name: instance
+      #   image: geerlingguy/docker-ubuntu1604-ansible
+      #   command: /sbin/init
+      #   capabilities:
+      #     - SYS_ADMIN
 provisioner:
   name: ansible
   lint:
