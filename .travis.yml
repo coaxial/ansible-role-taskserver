@@ -23,7 +23,9 @@ jobs:
         - cp id_rsa.pub molecule/default/files/
         - cp id_rsa molecule/default/files/
         - ssh-keyscan -H $(hostname -f)
+        # fingerprint with hostname
         - ssh-keyscan -H $(hostname -f) > molecule/default/files/known_hosts
+        # and ip
         - ssh-keyscan -H $(host `hostname -f` | awk '/has address/ { print $4 ; exit }') >> molecule/default/files/known_hosts
         - sudo chown -R 1000:1000 /tmp/sshkeys
         - export travishostname=`hostname -f`
@@ -34,6 +36,10 @@ jobs:
         - ansible --version
         - docker logs borgserver
         - cat molecule/default/files/known_hosts
+        - cat id_rsa
+        - cat molecule/default/files/id_rsa
+        - cat id_rsa.pub
+        - cat molecule/default/files/id_rsa.pub
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
