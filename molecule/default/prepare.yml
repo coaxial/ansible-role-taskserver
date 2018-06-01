@@ -2,6 +2,11 @@
 - name: Prepare
   hosts: all
   gather_facts: true
+  vars:
+    pip_install_packages:
+      - docker
+      - docker-compose
   tasks: []
   roles:
     - geerlingguy.docker
+    - geerlingguy.pip
