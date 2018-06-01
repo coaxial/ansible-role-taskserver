@@ -23,7 +23,7 @@ jobs:
         - cp id_rsa molecule/default/files/
         - sudo chown -R 1000:1000 /tmp/sshkeys
         - export travishostname=`hostname -f`
-        - docker run -d --name borgserver -v borgrepo:/backup/travisci:ro -v /tmp/sshkeys:/sshkeys:ro nold360/borgserver
+        - docker run -d --name borgserver -v borgrepo:/backup/travisci -v /tmp/sshkeys:/sshkeys:ro nold360/borgserver
       script: molecule --debug test
       after_script:
         - molecule --version
