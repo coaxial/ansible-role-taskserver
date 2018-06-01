@@ -23,11 +23,12 @@ jobs:
         - cp id_rsa molecule/default/files/
         - sudo chown -R 1000:1000 /tmp/sshkeys
         - export travishostname=`hostname -f`
-        - docker run -d -v borgrepo:/backup/travisci:ro -v /tmp/sshkeys:/sshkeys:ro nold360/borgserver
-      script: molecule test
+        - docker run -d --name borgserver -v borgrepo:/backup/travisci:ro -v /tmp/sshkeys:/sshkeys:ro nold360/borgserver
+      script: molecule --debug test
       after_script:
         - molecule --version
         - ansible --version
+        - docker logs borgserver
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
