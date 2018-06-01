@@ -24,6 +24,7 @@ jobs:
         - cp id_rsa molecule/default/files/
         - ssh-keyscan -H $(hostname -f)
         - ssh-keyscan -H $(hostname -f) > molecule/default/files/known_hosts
+        - ssh-keyscan -H $(host `hostname -f` | awk '/has address/ { print $4 ; exit }') >> molecule/default/files/known_hosts
         - sudo chown -R 1000:1000 /tmp/sshkeys
         - export travishostname=`hostname -f`
         - docker run -d --name borgserver -v borgrepo:/backup/travisci/ -v /tmp/sshkeys:/sshkeys nold360/borgserver
