@@ -14,11 +14,6 @@ platforms:
       - SYS_ADMIN
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      # - name: instance
-      #   image: geerlingguy/docker-ubuntu1604-ansible
-      #   command: /sbin/init
-      #   capabilities:
-      #     - SYS_ADMIN
 provisioner:
   name: ansible
   lint:
