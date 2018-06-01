@@ -9,7 +9,7 @@
     td__cert_country: 'CA'
     td__cert_state: 'ON'
     td__cert_locality: 'Toronto'
-    td__borg_url: borg@{{ lookup('env', 'travishostname') }}/backup/travisci/borgrepo
+    td__borg_url: borg@{{ lookup('env', 'travishostname') }}:borgrepo
     td__borg_passphrase: s3cur3
 
   roles:
