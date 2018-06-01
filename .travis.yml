@@ -12,6 +12,18 @@ jobs:
         - pip install ansible
         - pip install docker
         - pip install molecule
+        # extract dummy borg repo and mount it into a borg server container
+        - tar xJf molecule/default/files/borgrepo.xz -C molecule/default/files
+        - docker volume create borgrepo
+        - docker run --rm -v borgrepo:/borgrepo-vol -v `pwd`/molecule/default/files/borgrepo/:/borgrepo-dir alpine sh -c 'cp -r /borgrepo-dir/* /borgrepo-vol/'
+        - ssh-keygen -f id_rsa -t rsa -N ''
+        - mkdir -p /tmp/sshkeys/clients
+        - cp id_rsa.pub /tmp/sshkeys/clients/travisci.pub
+        - cp id_rsa.pub molecule/default/files/
+        - cp id_rsa molecule/default/files/
+        - sudo chown -R 1000:1000 /tmp/sshkeys
+        - export travishostname=`hostname -f`
+        - docker run -d -v borgrepo:/backup/travisci:ro -v /tmp/sshkeys:/sshkeys:ro nold360/borgserver
       script: molecule test
       after_script:
         - molecule --version
