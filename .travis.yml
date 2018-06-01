@@ -29,7 +29,7 @@ jobs:
         - ssh-keyscan -H $(host `hostname -f` | awk '/has address/ { print $4 ; exit }') >> molecule/default/files/known_hosts
         - sudo chown -R 1000:1000 /tmp/sshkeys
         - export travishostname=`hostname -f`
-        - docker run -d --name borgserver -v borgrepo:/backup/travisci/ -v /tmp/sshkeys:/sshkeys nold360/borgserver
+        - docker run -d --name borgserver -p 2222:22 -v borgrepo:/backup/travisci/ -v /tmp/sshkeys:/sshkeys nold360/borgserver
       script: molecule --debug test
       after_script:
         - molecule --version
