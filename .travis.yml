@@ -47,6 +47,13 @@ jobs:
         - cat /tmp/sshkeys/clients/travisci
         - cat molecule/default/files/id_rsa.pub
         - ls -clash molecule/default/files/
+        - docker run --rm --add-host taskd.example.com:$(hostname -f) -v molecule/default/files/client_files:/client_files alpine sh -c "apk --no-cache add task &&\
+          task config --force taskd.ca /client_files/ca.cert.pem &&\
+          task config --force taskd.certificate /client_files/user.cert.pem &&\
+          task config --force taskd.key /client_files/user.key.pem &&\
+          task config --force taskd.server taskd.example.org:53389 &&\
+          task config --force taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) &&\
+          task sync init"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
