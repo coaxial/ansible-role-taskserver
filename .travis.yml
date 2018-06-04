@@ -26,7 +26,7 @@ jobs:
         - docker run -d --name borgserver -p 2222:22 -v borgrepo:/backup/travisci/ -v /tmp/sshkeys:/sshkeys nold360/borgserver
         - sleep 15
         - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver)
-        - ssh-keyscan -H -p 2222 $(hostname -f) 
+        - ssh-keyscan -H -p 2222 $(hostname -f)
         - ssh-keyscan -H -p 2222 "${borg_server_ip}"
         # fingerprint with hostname
         - ssh-keyscan -H -p 2222 "${borg_server_ip}" > molecule/default/files/known_hosts
