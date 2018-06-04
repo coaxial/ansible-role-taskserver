@@ -29,7 +29,8 @@ jobs:
         - echo ${borg_server_ip}
         - docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver
         - ssh-keyscan -H -t rsa -p 2222 $(hostname -f) > molecule/default/files/known_hosts
-        # - ssh-keyscan -H -p 2222 "${borg_server_ip}"
+        - ssh-keyscan -H -p 2222 "${borg_server_ip}"
+        - ssh-keyscan -H "${borg_server_ip}"
         # fingerprint with hostname
         # - ssh-keyscan -H -p 2222 "${borg_server_ip}" > molecule/default/files/known_hosts
         - ping -c 3 ${borg_server_ip}
