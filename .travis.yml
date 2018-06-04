@@ -26,38 +26,13 @@ jobs:
         - docker run -d --name borgserver -p 2222:22 -v borgrepo:/backup/travisci/borgrepo -v /tmp/sshkeys:/sshkeys nold360/borgserver
         - sleep 15
         - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver | sed 's/\r//')
-        - echo ${borg_server_ip}
         - docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver
-        # - ssh-keyscan -H -t rsa -p 2222 $(hostname -f) > molecule/default/files/known_hosts
-        # - ssh-keyscan -H -p 2222 "${borg_server_ip}"
         - ssh-keyscan -H "${borg_server_ip}" > molecule/default/files/known_hosts
-        # fingerprint with hostname
-        # - ssh-keyscan -H -p 2222 "${borg_server_ip}" > molecule/default/files/known_hosts
-        - ping -c 3 ${borg_server_ip}
-        - cat molecule/default/files/known_hosts
-        # and ip
-        # - ssh-keyscan -H $(host `hostname -f` | awk '/has address/ { print $4 ; exit }') >> molecule/default/files/known_hosts
       script: molecule --debug test
       after_script:
-        - export docker_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' borgserver)
-        - docker run --rm --add-host taskd.example.com:${docker_ip} -v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c "
-          apk --no-cache add task &&
-          yes | task version &&
-          yes | task config taskd.ca /client_files/ca.cert.pem &&
-          yes | task config taskd.certificate /client_files/user.cert.pem &&
-          yes | task config taskd.key /client_files/user.key.pem &&
-          yes | task config taskd.server taskd.example.org:53389 &&
-          yes | task config taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) &&
-          yes | task sync init"
         - molecule --version
         - ansible --version
-        - docker-compose logs
         - docker logs borgserver
-        - cat molecule/default/files/known_hosts
-        - cat molecule/default/files/id_rsa
-        - cat /tmp/sshkeys/clients/travisci
-        - cat molecule/default/files/id_rsa.pub
-        - ls -clash molecule/default/files/
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
