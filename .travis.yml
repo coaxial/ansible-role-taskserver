@@ -41,14 +41,14 @@ jobs:
       after_script:
         - export docker_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' borgserver)
         - docker run --rm --add-host taskd.example.com:${docker_ip} -v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c "
-          ls -clash /client_files &&\
-          apk --no-cache add task &&\
-          task config --force taskd.ca /client_files/ca.cert.pem &&\
-          task config --force taskd.certificate /client_files/user.cert.pem &&\
-          task config --force taskd.key /client_files/user.key.pem &&\
-          task config --force taskd.server taskd.example.org:53389 &&\
-          task config --force taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) &&\
-          task sync init"
+          apk --no-cache add task &&
+          yes | task version &&
+          yes | task config taskd.ca /client_files/ca.cert.pem &&
+          yes | task config taskd.certificate /client_files/user.cert.pem &&
+          yes | task config taskd.key /client_files/user.key.pem &&
+          yes | task config taskd.server taskd.example.org:53389 &&
+          yes | task config taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) &&
+          yes | task sync init"
         - molecule --version
         - ansible --version
         - docker-compose logs
