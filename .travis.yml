@@ -42,10 +42,10 @@ jobs:
         - ansible --version
         - docker logs borgserver
         - cat molecule/default/files/known_hosts
-        - cat /tmp/sshkeys/clients/id_rsa
         - cat molecule/default/files/id_rsa
-        - cat /tmp/sshkeys/clients/id_rsa.pub
+        - cat /tmp/sshkeys/clients/travisci
         - cat molecule/default/files/id_rsa.pub
+        - ls -clash molecule/default/files/
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
