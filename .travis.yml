@@ -25,7 +25,7 @@ jobs:
         - sudo chown -R 1000:1000 /tmp/sshkeys
         - docker run -d --name borgserver -p 2222:22 -v borgrepo:/backup/travisci/ -v /tmp/sshkeys:/sshkeys nold360/borgserver
         - sleep 15
-        - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver)
+        - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver | sed 's/\r//')
         - echo ${borg_server_ip}
         - docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver
         - ssh-keyscan -H -p 2222 $(hostname -f)
