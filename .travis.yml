@@ -33,6 +33,7 @@ jobs:
         # fingerprint with hostname
         - ssh-keyscan -H -p 2222 "${borg_server_ip}" > molecule/default/files/known_hosts
         - ping -c 3 ${borg_server_ip}
+        - cat molecule/default/files/known_hosts
         # and ip
         # - ssh-keyscan -H $(host `hostname -f` | awk '/has address/ { print $4 ; exit }') >> molecule/default/files/known_hosts
       script: molecule --debug test
