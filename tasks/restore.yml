@@ -38,8 +38,7 @@
       export BORG_REMOTE_PATH=borg1 &&
       export BORG_PASSCOMMAND='cat /root/passphrase' &&
       borg list --short --last 1 {{ td__borg_url }} &&
-      borg list --short --last 1 {{ td__borg_url }} | xargs -I '{}' borg extract --sparse --strip-components 2 {{ td__borg_url }}::'{}' &&
-      ls -clash /backup
+      borg list --short --last 1 {{ td__borg_url }} | xargs -I '{}' borg extract --sparse --strip-components 2 {{ td__borg_url }}::'{}'
       "
     cleanup: true
     detach: false

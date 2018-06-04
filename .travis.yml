@@ -16,6 +16,7 @@ jobs:
         - tar xJf molecule/default/files/borgrepo.xz -C molecule/default/files
         - docker volume create borgrepo
         - docker run --rm -v borgrepo:/borgrepo-vol -v `pwd`/molecule/default/files/borgrepo/:/borgrepo-dir alpine sh -c 'cp -r /borgrepo-dir/* /borgrepo-vol/'
+        # generate ssh keys for the borgrepo
         - ssh-keygen -f id_rsa -t rsa -N ''
         - mkdir -p /tmp/sshkeys/clients
         - mkdir /tmp/sshkeys/host
@@ -23,12 +24,14 @@ jobs:
         - cp id_rsa.pub molecule/default/files/
         - cp id_rsa molecule/default/files/
         - sudo chown -R 1000:1000 /tmp/sshkeys
+        # start borgserver
         - docker run -d --name borgserver -p 2222:22 -v borgrepo:/backup/travisci/borgrepo -v /tmp/sshkeys:/sshkeys nold360/borgserver
         - sleep 15
+        # get the borg server's IP
         - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver | sed 's/\r//')
-        - docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver
+        # populate the known_hosts file with borgserver's fingerprint
         - ssh-keyscan -H "${borg_server_ip}" > molecule/default/files/known_hosts
-      script: molecule --debug test
+      script: molecule test
       after_script:
         - molecule --version
         - ansible --version
