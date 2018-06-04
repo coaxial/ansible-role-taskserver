@@ -39,22 +39,25 @@ jobs:
         # - ssh-keyscan -H $(host `hostname -f` | awk '/has address/ { print $4 ; exit }') >> molecule/default/files/known_hosts
       script: molecule --debug test
       after_script:
-        - molecule --version
-        - ansible --version
-        - docker logs borgserver
-        - cat molecule/default/files/known_hosts
-        - cat molecule/default/files/id_rsa
-        - cat /tmp/sshkeys/clients/travisci
-        - cat molecule/default/files/id_rsa.pub
-        - ls -clash molecule/default/files/
         - export docker_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' borgserver)
-        - docker run --rm --add-host taskd.example.com:${docker_ip} -v `pwd`/molecule/default/files/client_files:/client_files alpine sh -c "apk --no-cache add task &&\
+        - docker run --rm --add-host taskd.example.com:${docker_ip} -v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c "
+          ls -clash /client_files &&\
+          apk --no-cache add task &&\
           task config --force taskd.ca /client_files/ca.cert.pem &&\
           task config --force taskd.certificate /client_files/user.cert.pem &&\
           task config --force taskd.key /client_files/user.key.pem &&\
           task config --force taskd.server taskd.example.org:53389 &&\
           task config --force taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) &&\
           task sync init"
+        - molecule --version
+        - ansible --version
+        - docker-compose logs
+        - docker logs borgserver
+        - cat molecule/default/files/known_hosts
+        - cat molecule/default/files/id_rsa
+        - cat /tmp/sshkeys/clients/travisci
+        - cat molecule/default/files/id_rsa.pub
+        - ls -clash molecule/default/files/
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
