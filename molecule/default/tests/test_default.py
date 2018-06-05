@@ -78,8 +78,25 @@ def test_ssh_files(host):
 
 
 def test_restoration(host):
-    taskserver_ip = host.run("sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(sudo docker ps -f 'name=service_taskserver' --format '{{.Names}}')")
-    task_list_cmd = "docker run --rm --add-host taskd.example.com:%s -v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c 'ping -c 3 taskd.example.com && apk --no-cache add task && yes | task version && yes | task config taskd.ca /client_files/ca.cert.pem && yes | task config taskd.certificate /client_files/user.cert.pem && yes | task config taskd.key /client_files/user.key.pem && yes | task config taskd.server taskd.example.org:53589 && yes | task config taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) && yes | task sync init'" % taskserver_ip
+    taskserver_ip = host.run(
+        "sudo docker inspect -f "
+        "'{% raw %}{{range .NetworkSettings.Networks}}{{.IPAddress}}"
+        "{{end}}{% endraw %}'"
+        "$(sudo docker ps -f 'name=service_taskserver' --format '"
+        "{% raw %}{{.Names}}'{% endraw %})"
+    )
+    task_list_cmd = "docker run --rm --add-host taskd.example.com:%s" \
+        "-v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c"\
+        "'ping -c 3 taskd.example.com && apk --no-cache add task && " \
+        "yes | task version &&" \
+        "yes | task config taskd.ca /client_files/ca.cert.pem &&" \
+        "yes | task config taskd.certificate /client_files/user.cert.pem &&" \
+        "yes | task config taskd.key /client_files/user.key.pem &&" \
+        "yes | task config taskd.server taskd.example.org:53589 &&" \
+        "yes | task config taskd.credentials -- " \
+        "My Org/user/$(cat /client_files/user-uuid) &&" \
+        "yes | task sync init'" % taskserver_ip
+
     tasks = host.run(task_list_cmd)
 
     print tasks
