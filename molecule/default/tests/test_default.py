@@ -81,7 +81,7 @@ def test_restoration(host):
     taskserver_container_name = host.check_output(
         # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
         {{
-            'sudo docker ps -f "name=service_taskserver" --format="{{.Names}}"'
+            'docker ps -f "name=service_taskserver" --format="{{.Names}}"'
         }}
     )
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
