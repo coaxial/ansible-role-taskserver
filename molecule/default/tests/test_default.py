@@ -96,6 +96,7 @@ def test_restoration(host):
         % (inspect_format_string, taskserver_container_name)
     )
     taskserver_ip = host.check_output(taskserver_ip_cmd)
+    host.run('docker network ls')
     task_list_cmd = "docker run --rm --add-host taskd.example.com:%s " \
         "-v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c"\
         " 'ping -c 3 taskd.example.com && apk --no-cache add task && " \
