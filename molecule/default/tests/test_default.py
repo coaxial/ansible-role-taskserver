@@ -80,11 +80,11 @@ def test_ssh_files(host):
 def test_restoration(host):
     taskserver_container_name = host.check_output(
         "sudo docker ps -f 'name=service_taskserver' "
-        " --format={{'{{.Names}}'}}"
+        " --format={{'\'{{.Names}}\''}}"
     )
     taskserver_ip_cmd = (
         "sudo docker inspect -f "
-        "{{'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'}} %s"
+        "{{'\'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}\''}} %s"
         % taskserver_container_name
     )
     taskserver_ip = host.check_output(taskserver_ip_cmd)
