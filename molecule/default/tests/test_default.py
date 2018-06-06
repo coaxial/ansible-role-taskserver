@@ -78,9 +78,12 @@ def test_ssh_files(host):
 
 
 def test_restoration(host):
+    # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
+    taskserver_container_name_cmd = ({{
+        'docker ps -f "name=service_taskserver" --format="{{.Names}}"'
+    }})
     taskserver_container_name = host.check_output(
-        # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
-        {{'docker ps -f "name=service_taskserver" --format="{{.Names}}"'}}
+        taskserver_container_name_cmd
     )
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
     inspect_format_string = ({{
