@@ -79,9 +79,9 @@ def test_ssh_files(host):
 
 def test_restoration(host):
     taskserver_ip_cmd = "sudo docker inspect -f " \
-        "{{'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'}}" \
+        "{{''{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}''}}" \
         "$(sudo docker ps -f 'name=service_taskserver'" \
-        "--format={{'{{.Names}}'}})"
+        "--format={{''{{.Names}}''}})"
     taskserver_ip = host.run(taskserver_ip_cmd)
     task_list_cmd = "docker run --rm --add-host taskd.example.com:%s" \
         "-v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c"\
