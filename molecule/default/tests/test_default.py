@@ -85,7 +85,7 @@ def test_restoration(host):
     taskserver_ip_cmd = (
         "sudo docker inspect -f "
         "{{'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'}} %s"
-        % taskserver_container_name
+        % taskserver_container_name.stdout
     )
     taskserver_ip = host.run(taskserver_ip_cmd)
     task_list_cmd = "docker run --rm --add-host taskd.example.com:%s" \
@@ -98,7 +98,7 @@ def test_restoration(host):
         "yes | task config taskd.server taskd.example.org:53589 &&" \
         "yes | task config taskd.credentials -- " \
         "My Org/user/$(cat /client_files/user-uuid) &&" \
-        "yes | task sync init'" % taskserver_ip
+        "yes | task sync init'" % taskserver_ip.stdout
 
     tasks = host.run(task_list_cmd)
 
