@@ -96,19 +96,22 @@ def test_restoration(host):
         % (inspect_format_string, taskserver_container_name)
     )
     taskserver_ip = host.check_output(taskserver_ip_cmd)
-    task_list_cmd = "docker run --rm --network container:%s " \
-        "-v `pwd`/molecule/default/client_files:/client_files:ro alpine sh " \
-        "-c '"\
-        "echo \"%s taskd.example.com\" >> /etc/hosts && " \
-        "ping -c 3 taskd.example.com && apk --no-cache add task && " \
-        "yes | task version && " \
-        "yes | task config taskd.ca /client_files/ca.cert.pem && " \
-        "yes | task config taskd.certificate /client_files/user.cert.pem && " \
-        "yes | task config taskd.key /client_files/user.key.pem && " \
-        "yes | task config taskd.server taskd.example.org:53589 && " \
-        "yes | task config taskd.credentials -- " \
-        "My Org/user/$(cat /client_files/user-uuid) && " \
+    task_list_cmd = (
+        "docker run --rm --network container:%s "
+        "-v `pwd`/molecule/default/client_files:/client_files:ro alpine sh "
+        "-c '"
+        "ls -clash /client_files && "
+        "echo \"%s taskd.example.com\" >> /etc/hosts && "
+        "ping -c 3 taskd.example.com && apk --no-cache add task && "
+        "yes | task version && "
+        "yes | task config taskd.ca /client_files/ca.cert.pem && "
+        "yes | task config taskd.certificate /client_files/user.cert.pem && "
+        "yes | task config taskd.key /client_files/user.key.pem && "
+        "yes | task config taskd.server taskd.example.org:53589 && "
+        "yes | task config taskd.credentials -- "
+        "My Org/user/$(cat /client_files/user-uuid) && "
         "yes | task sync init'" % (taskserver_container_name, taskserver_ip)
+    )
 
     tasks = host.check_output(task_list_cmd)
 
