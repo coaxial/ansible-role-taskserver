@@ -80,14 +80,12 @@ def test_ssh_files(host):
 def test_restoration(host):
     taskserver_container_name = host.check_output(
         # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
-        {{
-            'docker ps -f "name=service_taskserver" --format="{{.Names}}"'
-        }}
+        {{'docker ps -f "name=service_taskserver" --format="{{.Names}}"'}}
     )
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
-    inspect_format_string = {{
+    inspect_format_string = ({{
         '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
-    }}
+    }})
     taskserver_ip_cmd = (
         "sudo docker inspect -f '%s' %s"
         % (inspect_format_string, taskserver_container_name)
