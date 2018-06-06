@@ -81,14 +81,15 @@ def test_restoration(host):
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
     taskserver_container_name_cmd = (
         "docker ps -f 'name=service_taskserver' "
-        "{% raw %}--format={{.Names}}{% endraw %}"
+        "{% raw -%}--format='{{.Names}}'{% endraw -%}"
     )
     taskserver_container_name = host.check_output(
         taskserver_container_name_cmd
     )
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
     inspect_format_string = (
-        {{'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'}}
+        "{% raw -%}{{range .NetworkSettings.Networks}}"
+        "{{.IPAddress}}{{end}}{% endraw -%}"
     )
     taskserver_ip_cmd = (
         "sudo docker inspect -f '%s' %s"
