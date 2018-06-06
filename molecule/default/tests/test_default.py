@@ -81,15 +81,15 @@ def test_restoration(host):
     taskserver_container_name = host.check_output(
         # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
         {{
-            "sudo docker ps -f 'name=service_taskserver' "
+            "sudo docker ps -f 'name=service_taskserver' " \
             " --format='{{.Names}}'"
         }}
     )
     taskserver_ip_cmd = (
         # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
         {{
-            "sudo docker inspect -f "
-            "'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' %s"
+            "sudo docker inspect -f " \
+            "'{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' %s" \
             % taskserver_container_name
         }}
     )
