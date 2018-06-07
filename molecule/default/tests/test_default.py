@@ -79,6 +79,10 @@ def test_ssh_files(host):
 
 def test_restoration(host):
     base_dir = '/home/travis/build/coaxial/ansible-role-taskserver'
+    host.check_output("sudo apt install tree -yq")
+    assert host.check_output("tree /") == 'foo'
+    assert host.check_output("tree %s" % base_dir) == 'foo'
+    host.check_output("ls -clash %s" % base_dir) == 'foo'
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
     taskserver_container_name_cmd = (
         "docker ps -f 'name=service_taskserver' "
@@ -99,7 +103,7 @@ def test_restoration(host):
     taskserver_ip = host.check_output(taskserver_ip_cmd)
     task_list_cmd = (
         "docker run --rm --network container:%s "
-        "-v %s/molecule/default/client_files:/client_files:ro alpine sh "
+        "-v %s/molecule/default/client_files/:/client_files:ro alpine sh "
         "-c '"
         "ls -clash /client_files && "
         "echo \"%s taskd.example.com\" >> /etc/hosts && "
