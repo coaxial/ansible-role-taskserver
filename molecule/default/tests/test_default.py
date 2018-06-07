@@ -95,6 +95,11 @@ def test_restoration(host):
         "docker inspect -f '%s' %s"
         % (inspect_format_string, taskserver_container_name)
     )
+    curr_dir = host.check_output(
+        "cd ~/build/coaxial/ansible-role-task-server/"
+        "molecule/default/client_files"
+    )
+    assert curr_dir == 'jfdskljfsd'
     taskserver_ip = host.check_output(taskserver_ip_cmd)
     task_list_cmd = (
         "docker run --rm --network container:%s "
