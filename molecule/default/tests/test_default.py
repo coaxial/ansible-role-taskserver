@@ -116,6 +116,7 @@ def test_restoration(host):
         "yes | task config taskd.server taskd.example.org:53589 && "
         "yes | task config taskd.credentials -- "
         "My Org/user/$(cat /client_files/user-uuid) && "
+        "task diag && "
         "yes | task sync init'" % (
             taskserver_container_name, taskserver_ip
         )
