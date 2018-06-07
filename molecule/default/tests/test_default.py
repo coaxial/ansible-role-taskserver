@@ -78,6 +78,7 @@ def test_ssh_files(host):
 
 
 def test_restoration(host):
+    base_dir = '/home/travis/build/coaxial/ansible-role-taskserver'
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
     taskserver_container_name_cmd = (
         "docker ps -f 'name=service_taskserver' "
@@ -95,15 +96,10 @@ def test_restoration(host):
         "docker inspect -f '%s' %s"
         % (inspect_format_string, taskserver_container_name)
     )
-    curr_dir = host.check_output(
-        "cd ~/build/coaxial/ansible-role-task-server/"
-        "molecule/default/client_files"
-    )
-    assert curr_dir == 'jfdskljfsd'
     taskserver_ip = host.check_output(taskserver_ip_cmd)
     task_list_cmd = (
         "docker run --rm --network container:%s "
-        "-v `pwd`/molecule/default/client_files:/client_files:ro alpine sh "
+        "-v %s/molecule/default/client_files:/client_files:ro alpine sh "
         "-c '"
         "ls -clash /client_files && "
         "echo \"%s taskd.example.com\" >> /etc/hosts && "
@@ -115,7 +111,9 @@ def test_restoration(host):
         "yes | task config taskd.server taskd.example.org:53589 && "
         "yes | task config taskd.credentials -- "
         "My Org/user/$(cat /client_files/user-uuid) && "
-        "yes | task sync init'" % (taskserver_container_name, taskserver_ip)
+        "yes | task sync init'" % (
+            taskserver_container_name, base_dir, taskserver_ip
+        )
     )
 
     tasks = host.check_output(task_list_cmd)
