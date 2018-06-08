@@ -14,7 +14,6 @@ jobs:
         - pip install molecule
         # extract dummy borg repo and mount it into a borg server container
         - tar xJf molecule/default/files/borgrepo.xz -C molecule/default/files
-        - sudo apt install tree -yq && tree `pwd`/molecule
         - docker volume create borgrepo
         - docker run --rm -v borgrepo:/borgrepo-vol -v `pwd`/molecule/default/files/borgrepo/:/borgrepo-dir alpine sh -c 'cp -r /borgrepo-dir/* /borgrepo-vol/'
         # generate ssh keys for the borgrepo
