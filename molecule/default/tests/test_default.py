@@ -80,7 +80,8 @@ def test_ssh_files(host):
 def test_restoration(host):
     host.check_output(
         "cd /opt/docker-taskd-service && "
-        "docker-compose exec taskserver sh -c '"
+        "docker-compose -T logs && "
+        "docker-compose -T exec taskserver sh -c '"
         "ls -clash /var/taskd && "
         "apk --no-cache add tree && "
         "tree /var/taskd'"
