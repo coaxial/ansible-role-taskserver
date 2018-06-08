@@ -78,6 +78,14 @@ def test_ssh_files(host):
 
 
 def test_restoration(host):
+    host.check_output(
+        "cd /opt/docker-taskd-service && "
+        "docker-compose logs && "
+        "docker-compose exec taskserver sh -c '"
+        "ls -clash /var/taskd && "
+        "apk --no-cache add tree && "
+        "tree /var/taskd'"
+    )
     # base_dir = '/home/travis/build/coaxial/ansible-role-taskserver'
     # host.check_output("sudo apt install tree -yq")
     # assert host.check_output("tree /") == 'foo'
