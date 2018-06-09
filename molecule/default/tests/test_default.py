@@ -79,10 +79,7 @@ def test_ssh_files(host):
 
 def test_restoration(host):
     host.check_output(
-        "cd /opt/docker-taskd-service && "
-        "ls -clash /var/taskd && "
-        "apk --no-cache add tree && "
-        "tree /var/taskd'"
+        "cat /opt/docker-taskd-service/taskserver/client_files/user-uuid"
     )
     # base_dir = '/home/travis/build/coaxial/ansible-role-taskserver'
     # host.check_output("sudo apt install tree -yq")
