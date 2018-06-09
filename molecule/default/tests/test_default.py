@@ -117,19 +117,13 @@ def test_restoration(host):
         "yes | task config taskd.credentials -- "
         "My Org/user/$(cat /client_files/user-uuid) && "
         "task diag && "
-        "yes | task rc.debug=1 rc.debug.tls=2 sync init || exit 0' && "
-        "task && "
-        "docker logs %s"
+        "yes | task sync init"
+        "'"
         % (
-            taskserver_container_name, taskserver_ip, taskserver_container_name
+            taskserver_container_name, taskserver_ip
         )
     )
 
-    tasks = host.check_output(task_list_cmd)
-    host.check_output(
-        "docker exec %s /bin/sh -c 'ls -clash /var/taskd/orgs/ && '"
-        "'ls -clash /var/taskd/orgs/My\ Org/users'"
-        % taskserver_container_name
-    )
+    task_sync = host.run(task_list_cmd)
 
-    assert tasks == 'foo'
+    assert "Sync successful." in task_sync.stderr
