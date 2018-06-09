@@ -127,10 +127,9 @@ def test_restoration(host):
 
     tasks = host.check_output(task_list_cmd)
     host.check_output(
-        "docker exec --rm %s /bin/sh -c 'ls -clash /var/taskd/orgs/ && '"
-        "docker exec --rm %s /bin/sh -c "
+        "docker exec %s /bin/sh -c 'ls -clash /var/taskd/orgs/ && '"
         "'ls -clash /var/taskd/orgs/My\ Org/users'"
-        % (taskserver_container_name, taskserver_container_name)
+        % taskserver_container_name
     )
 
     assert tasks == 'foo'
