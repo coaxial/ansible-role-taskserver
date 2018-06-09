@@ -3,7 +3,7 @@
   hosts: all
   vars:
     td__fqdn: taskd.example.org
-    td__orgname: 'test org'
+    td__orgname: 'My Org'
     td__cert_organization: 'test cert org'
     td__cert_country: 'CA'
     td__cert_state: 'ON'
