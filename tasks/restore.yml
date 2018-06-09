@@ -50,7 +50,7 @@
     volumes:
       - taskddata_restore:/backup
       - "{{ td__taskdata_volname }}:/target"
-    command: /bin/sh -c 'cp -r /backup/* /target'
+      command: /bin/sh -c 'rm -rf /target/* && cp -r /backup/* /target'
     cleanup: true
     detach: false
 
