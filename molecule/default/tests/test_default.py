@@ -78,9 +78,6 @@ def test_ssh_files(host):
 
 
 def test_restoration(host):
-    host.check_output(
-        "cat /opt/docker-taskd-service/taskserver/client_files/user-uuid"
-    )
     # base_dir = '/home/travis/build/coaxial/ansible-role-taskserver'
     # host.check_output("sudo apt install tree -yq")
     # assert host.check_output("tree /") == 'foo'
@@ -126,5 +123,11 @@ def test_restoration(host):
     )
 
     tasks = host.check_output(task_list_cmd)
+    host.check_output(
+        "docker exec --rm %s /bin/sh -c 'ls -clash /var/taskd/orgs/ && '"
+        "docker exec --rm %s /bin/sh -c "
+        "'ls -clash /var/taskd/orgs/My\ Org/users'"
+        % (taskserver_container_name, taskserver_container_name)
+    )
 
     assert tasks == 'foo'
