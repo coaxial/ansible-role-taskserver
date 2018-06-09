@@ -30,6 +30,7 @@ jobs:
         # get the borg server's IP
         - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver | sed 's/\r//')
         # make it resolve where travis is running
+        - ping -c 3 taskserver
         - sudo echo "${borg_server_ip} taskserver" >> /etc/hosts
         # populate the known_hosts file with borgserver's fingerprint
         - ssh-keyscan -H "${borg_server_ip}" > molecule/default/files/known_hosts
