@@ -117,7 +117,7 @@ def test_restoration(host):
         "yes | task config taskd.credentials -- "
         "My Org/user/$(cat /client_files/user-uuid) && "
         "task diag && "
-        "yes | task sync init || exit 0' && "
+        "yes | task rc.debug=1 rc.debug.tls=2 sync init || exit 0' && "
         "docker logs %s"
         % (
             taskserver_container_name, taskserver_ip, taskserver_container_name
