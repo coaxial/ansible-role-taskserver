@@ -119,6 +119,7 @@ def test_restoration(host):
         "yes | task config taskd.trust -- allow all && "
         "task diag && "
         "yes | task rc.debug=1 rc.debug.tls=2 sync init || exit 0' && "
+        "task && "
         "docker logs %s"
         % (
             taskserver_container_name, taskserver_ip, taskserver_container_name
