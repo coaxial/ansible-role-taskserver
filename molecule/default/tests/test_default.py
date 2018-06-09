@@ -102,6 +102,7 @@ def test_restoration(host):
     )
     taskserver_ip = host.check_output(taskserver_ip_cmd)
     task_list_cmd = (
+        "docker logs %s && "
         "docker run --rm --network container:%s "
         "-v /opt/docker-taskd-service/taskserver/client_certs/:"
         "/client_files:ro alpine sh "
@@ -118,7 +119,7 @@ def test_restoration(host):
         "My Org/user/$(cat /client_files/user-uuid) && "
         "task diag && "
         "yes | task sync init'" % (
-            taskserver_container_name, taskserver_ip
+            taskserver_container_name, taskserver_container_name, taskserver_ip
         )
     )
 
