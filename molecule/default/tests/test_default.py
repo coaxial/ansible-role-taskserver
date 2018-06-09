@@ -78,11 +78,10 @@ def test_ssh_files(host):
 
 
 def test_restoration(host):
-    # base_dir = '/home/travis/build/coaxial/ansible-role-taskserver'
-    # host.check_output("sudo apt install tree -yq")
-    # assert host.check_output("tree /") == 'foo'
-    # assert host.check_output("tree %s" % base_dir) == 'foo'
-    # host.check_output("ls -clash %s" % base_dir) == 'foo'
+    # first extract container name and ip, then start a new container and
+    # install taskwarrior on it, configure it, and attempt to sync with
+    # taskserver from role.
+
     # cf http://jinja.pocoo.org/docs/2.10/templates/#escaping
     taskserver_container_name_cmd = (
         "docker ps -f 'name=service_taskserver' "
@@ -106,9 +105,8 @@ def test_restoration(host):
         "-v /opt/docker-taskd-service/taskserver/client_certs/:"
         "/client_files:ro alpine sh "
         "-c '"
-        "ls -clash /client_files && "
         "echo \"%s taskserver\" >> /etc/hosts && "
-        "ping -c 3 taskserver && apk --no-cache add task && "
+        "apk --no-cache add task && "
         "yes | task version && "
         "yes | task config taskd.ca /client_files/ca.cert.pem && "
         "yes | task config taskd.certificate /client_files/user.cert.pem && "
@@ -116,7 +114,6 @@ def test_restoration(host):
         "yes | task config taskd.server taskserver:53589 && "
         "yes | task config taskd.credentials -- "
         "My Org/user/$(cat /client_files/user-uuid) && "
-        "task diag && "
         "yes | task sync init"
         "'"
         % (

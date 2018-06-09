@@ -32,18 +32,7 @@ jobs:
         # populate the known_hosts file with borgserver's fingerprint
         - ssh-keyscan -H "${borg_server_ip}" > molecule/default/files/known_hosts
       script:
-        - molecule --debug test
-        # - export docker_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' borgserver)
-        # - docker run --rm --add-host taskd.example.com:${docker_ip} -v `pwd`/molecule/default/client_files:/client_files:ro alpine sh -c "
-        #   ping -c 3 taskd.example.com &&\
-        #   apk --no-cache add task &&
-        #   yes | task version &&
-        #   yes | task config taskd.ca /client_files/ca.cert.pem &&
-        #   yes | task config taskd.certificate /client_files/user.cert.pem &&
-        #   yes | task config taskd.key /client_files/user.key.pem &&
-        #   yes | task config taskd.server taskd.example.org:53589 &&
-        #   yes | task config taskd.credentials -- My Org/user/$(cat /client_files/user-uuid) &&
-        #   yes | task sync init"
+        - molecule test
       after_script:
         - molecule --version
         - ansible --version

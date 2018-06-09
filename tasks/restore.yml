@@ -54,16 +54,6 @@
     cleanup: true
     detach: false
 
-- name: REMOVEME debug
-  docker_container:
-    image: alpine
-    name: debug
-    volumes:
-      - "{{ td__taskdata_volname }}:/restored:ro"
-    command: /bin/sh -c 'apk --no-cache add tree && tree /restored'
-    cleanup: true
-    detach: false
-
 - name: Remove volume
   docker_volume:
     name: taskddata_restore
