@@ -2,6 +2,7 @@
 jobs:
   include:
     - stage: test
+      sudo: required
       language: python
       python: "2.7"
       cache: pip
@@ -9,12 +10,33 @@ jobs:
         - docker
       install:
         - pip install ansible
-        - pip install docker-py
+        - pip install docker
         - pip install molecule
-      script: molecule test
+        # extract dummy borg repo and mount it into a borg server container
+        - tar xJf molecule/default/files/borgrepo.xz -C molecule/default/files
+        - docker volume create borgrepo
+        - docker run --rm -v borgrepo:/borgrepo-vol -v `pwd`/molecule/default/files/borgrepo/:/borgrepo-dir alpine sh -c 'cp -r /borgrepo-dir/* /borgrepo-vol/'
+        # generate ssh keys for the borgrepo
+        - ssh-keygen -f id_rsa -t rsa -N ''
+        - mkdir -p /tmp/sshkeys/clients
+        - mkdir /tmp/sshkeys/host
+        - cp id_rsa.pub /tmp/sshkeys/clients/travisci
+        - cp id_rsa.pub molecule/default/files/
+        - cp id_rsa molecule/default/files/
+        - sudo chown -R 1000:1000 /tmp/sshkeys
+        # start borgserver
+        - docker run -d --name borgserver -p 2222:22 -v borgrepo:/backup/travisci/borgrepo -v /tmp/sshkeys:/sshkeys nold360/borgserver
+        - sleep 15
+        # get the borg server's IP
+        - export borg_server_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' borgserver | sed 's/\r//')
+        # populate the known_hosts file with borgserver's fingerprint
+        - ssh-keyscan -H "${borg_server_ip}" > molecule/default/files/known_hosts
+      script:
+        - molecule test
       after_script:
         - molecule --version
         - ansible --version
+        - docker logs borgserver
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
