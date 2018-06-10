@@ -3,7 +3,7 @@ version: '3'
 services:
   borgmatic:
     volumes:
-      - taskddata:/var/taskd:ro
+      - {{ td__taskdata_volname }}:/var/taskd:ro
 
 volumes:
   taskddata:
