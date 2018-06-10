@@ -31,7 +31,7 @@ name | default value | possible values | purpose
 `td__fqdn` | none, must be set | any valid FQDN (must resolve with DNS) | sets the container's hostname and is used as the certificates' CN. Must match the FQDN the client uses to connect to the server
 `td__orgname` | none, must be set | any string | defines the taskserver organization
 `td__project_src` | `/opt/docker-taskd-service` | any valid path | defines where the `docker-taskd-service` repo will be cloned
-`td__restore_latest_backup` | `true` | boolean | whether to restore the latest borg backup after installing. **NOTE THAT THIS WILL WIPE CLEAN TASKDDATA BEFORE RESTORING**
+`td__restore_latest_backup` | `true` | boolean | whether to restore the latest borg backup after installing. **NOTE THAT THIS WILL WIPE CLEAN TASKDDATA (i.e. all tasks on server for every user) BEFORE RESTORING**
 `td__service_name` | value of `td__fqdn` | any string | used to name borg backups
 `td__taskdata_volname` | `docker-taskd-service_taskddata` | the docker-compose name for the `taskddata` volume created by `docker-taskd-service` | tells the backup service where to find taskd's data. No need to change unless `td__project_src` has been changed
 `td__username` | `user` | any string | username to create in the taskserver
